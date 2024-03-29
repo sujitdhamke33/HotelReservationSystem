@@ -9,13 +9,15 @@ import java.util.Scanner;
 
 class Hotel {
     private String name;
-    private int weekdayRate, weekendRate, rating;
+    private int weekdayRate, weekendRate, rating,weekdayReward,weekendReward;
 
-    public Hotel(String name, int weekdayRate, int weekendRate, int rating) {
+    public Hotel(String name, int weekdayRate, int weekendRate, int rating, int weekdayReward, int weekendReward) {
         this.name = name;
         this.weekdayRate = weekdayRate;
         this.weekendRate = weekendRate;
         this.rating = rating;
+        this.weekdayReward = weekdayReward;
+        this.weekendReward = weekendReward;
     }
 
     public int getRate(DayOfWeek dayOfWeek) {
@@ -42,10 +44,19 @@ public class HotelSystem {
     static Scanner sc = new Scanner(System.in);
 
     static void addHotel() {
-        hotelList.add(new Hotel("Lakewood", 110, 90, 3));
-        hotelList.add(new Hotel("Bridgewood", 150, 50, 4));
-        hotelList.add(new Hotel("Ridgewood", 220, 150, 5));
-        System.out.println(hotelList);
+        hotelList.add(new Hotel("Lakewood", 110, 90, 3,80,80));
+        hotelList.add(new Hotel("Bridgewood", 150, 50, 4,100,50));
+        hotelList.add(new Hotel("Ridgewood", 220, 150, 5,100,40));
+
+        allHotels();
+    }
+
+    static void allHotels(){
+        for(int i=0;i<hotelList.size();i++)
+        {
+            Hotel hotel=hotelList.get(i);
+            System.out.println(hotel);
+        }
     }
 
     static void cheapestHotel() {

@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 class HotelSystemTest {
     private List<Hotel> hotelList;
@@ -16,9 +17,9 @@ class HotelSystemTest {
     @BeforeEach
     public void setUp() {
         hotelList = new ArrayList<>();
-        hotelList.add(new Hotel("Lakewood", 110, 90, 3));
-        hotelList.add(new Hotel("Bridgewood", 150, 50, 4));
-        hotelList.add(new Hotel("Ridgewood", 220, 150, 5));
+        hotelList.add(new Hotel("Lakewood", 110, 90, 3,80,80));
+        hotelList.add(new Hotel("Bridgewood", 150, 50, 4,80,80));
+        hotelList.add(new Hotel("Ridgewood", 220, 150, 5,80,80));
 
         hotelSystem = new HotelSystem();
     }
@@ -75,4 +76,14 @@ class HotelSystemTest {
 
         Assertions.assertEquals(200,actual);
     }
-}
+    @Test
+    public void rewardAddedTest(){
+        List<Hotel> hotelList = new ArrayList<>();
+
+            hotelList.add(new Hotel("Lakewood", 110, 90, 3,80,80));
+            hotelList.add(new Hotel("Bridgewood", 150, 50, 4,100,50));
+            hotelList.add(new Hotel("Ridgewood", 220, 150, 5,100,40));
+
+            System.out.println(hotelList);
+        }
+    }
