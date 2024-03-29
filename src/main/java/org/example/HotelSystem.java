@@ -3,6 +3,7 @@ package org.example;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -10,6 +11,26 @@ import java.util.Scanner;
 class Hotel {
     private String name;
     private int weekdayRate, weekendRate, rating,weekdayReward,weekendReward;
+
+    public String getName() {
+        return name;
+    }
+
+    public int getWeekdayRate() {
+        return weekdayRate;
+    }
+
+    public int getWeekendRate() {
+        return weekendRate;
+    }
+
+    public int getWeekdayReward() {
+        return weekdayReward;
+    }
+
+    public int getWeekendReward() {
+        return weekendReward;
+    }
 
     public Hotel(String name, int weekdayRate, int weekendRate, int rating, int weekdayReward, int weekendReward) {
         this.name = name;
@@ -23,6 +44,7 @@ class Hotel {
     public int getRate(DayOfWeek dayOfWeek) {
         return (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) ? weekendRate : weekdayRate;
     }
+
 
     public int getRating() {
         return rating;
@@ -134,13 +156,47 @@ public class HotelSystem {
         return lowestPrice;
     }
 
+    public static void rewardCustomer() {
+        LocalDate dateStart = null;
+        LocalDate dateEnd = null;
+        try {
+            System.out.println("Enter the starting date in (yyyy-mm-dd): ");
+            String startDate = sc.next();
+            dateStart = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
+
+            System.out.println("Enter the ending date in (yyyy-mm-dd): ");
+            String endDate = sc.next();
+            dateEnd = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
+        } catch (Exception e) {
+            System.out.println("Error: Invalid date format");
+            return;
+        }
+
+        Hotel bestRatedHotel = hotelList.get(0);
+        double lowestPrice = Double.MAX_VALUE;
+        long countDays = ChronoUnit.DAYS.between(dateStart, dateEnd);
+
+        for (int i = 0; i < hotelList.size(); i++) {
+            Hotel hotel = hotelList.get(i);
+            double totalRate = countDays * (hotel.getWeekdayReward() + hotel.getWeekendReward());
+
+            if (hotel.getRating() >= bestRatedHotel.getRating() || (hotel.getRating() == bestRatedHotel.getRating() && totalRate < lowestPrice)) {
+                bestRatedHotel = hotel;
+                lowestPrice = totalRate;
+            }
+        }
+
+        System.out.println("Best rated hotel for the given date range for reward customers: " + bestRatedHotel.getName() + ", Rating: " + bestRatedHotel.getRating() + " and Total Rates: $" + lowestPrice);
+    }
+
+
     public static void main(String[] args) {
         HotelSystem hotelsystem = new HotelSystem();
         System.out.println("Welcome to my hotel system chain");
         int choice;
         do {
             System.out.println(" 0 : exit , 1 : add Hotels , 2 : cheapest Hotel , 3 : cheapest Hotel for specific dates, 4 : best rated cheapest hotel for specific dates" +
-                    " 5 : best rated chepest hotels");
+                    " 5 : best rated chepest hotels, 6 : rewardCustomers");
             choice = sc.nextInt();
             switch (choice) {
                 case 0:
@@ -166,6 +222,9 @@ public class HotelSystem {
                     LocalDate endDates = LocalDate.parse("2020-09-12", DateTimeFormatter.ISO_DATE);
 
                     bestRatedCheapestHotelRateCalculate(startDates,endDates,hotelList);
+                    break;
+                case 6:
+                    rewardCustomer();
                     break;
             }
         } while (choice != 0);
