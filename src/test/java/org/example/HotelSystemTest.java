@@ -55,6 +55,17 @@ class HotelSystemTest {
     }
 
     @Test //6
+    public void testlowRatedCheapestHotelRateCalculate() {
+        LocalDate startDate = LocalDate.parse("2020-09-11", DateTimeFormatter.ISO_DATE);
+        LocalDate endDate = LocalDate.parse("2020-09-12", DateTimeFormatter.ISO_DATE);
+
+        long expected = 200; // Expected cost for the best rated cheapest hotel for the given date range
+        long actual = hotelSystem.bestRatedCheapestHotelRateCalculate(startDate, endDate, hotelList);
+
+        Assertions.assertEquals(200,actual);
+    }
+
+    @Test //7
     public void testBestRatedCheapestHotelRateCalculate() {
         LocalDate startDate = LocalDate.parse("2020-09-11", DateTimeFormatter.ISO_DATE);
         LocalDate endDate = LocalDate.parse("2020-09-12", DateTimeFormatter.ISO_DATE);

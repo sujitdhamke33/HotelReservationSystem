@@ -49,7 +49,7 @@ public class HotelSystem {
     }
 
     static void cheapestHotel() {
-        System.out.println("Enter the starting date in (yyyy-mm-dd): ");
+        System.out.println("Enter your starting date in (yyyy-mm-dd): ");
         String startDate = sc.next();
         LocalDate dateStart = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
 
@@ -96,7 +96,7 @@ public class HotelSystem {
     }
 
     static long bestRatedCheapestHotelRateCalculate(LocalDate startDate, LocalDate endDate, List<Hotel> hotelList) {
-        Hotel bestRatedCheapestHotel = hotelList.get(0);
+        Hotel bestRatedHotel = hotelList.get(0);
         long lowestPrice = Long.MAX_VALUE;
         int highestRating = Integer.MIN_VALUE;
 
@@ -109,14 +109,17 @@ public class HotelSystem {
                 currentDate = currentDate.plusDays(1);
             }
 
-            if (totalCost < lowestPrice || (totalCost == lowestPrice && hotel.getRating() > highestRating)) {
-                lowestPrice = totalCost;
-                bestRatedCheapestHotel = hotel;
-                highestRating = hotel.getRating();
+            if (totalCost <= lowestPrice) {
+                if (totalCost < lowestPrice || hotel.getRating() > highestRating) {
+                    lowestPrice = totalCost;
+                    bestRatedHotel = hotel;
+                    highestRating = hotel.getRating();
+                }
             }
         }
 
-        System.out.println("Best rated cheapest hotel: " + bestRatedCheapestHotel.toString() + " and price is: " + lowestPrice);
+        System.out.println("Best rated hotel for the given price range: " + bestRatedHotel.toString() + " and price is: " + lowestPrice);
+       // return highestRating;
         return lowestPrice;
     }
 
@@ -125,7 +128,8 @@ public class HotelSystem {
         System.out.println("Welcome to my hotel system chain");
         int choice;
         do {
-            System.out.println(" 0 : exit , 1 : add Hotels , 2 : cheapest Hotel , 3 : cheapest Hotel for specific dates, 4 : best rated cheapest hotel for specific dates");
+            System.out.println(" 0 : exit , 1 : add Hotels , 2 : cheapest Hotel , 3 : cheapest Hotel for specific dates, 4 : best rated cheapest hotel for specific dates" +
+                    " 5 : best rated chepest hotels");
             choice = sc.nextInt();
             switch (choice) {
                 case 0:
@@ -145,6 +149,12 @@ public class HotelSystem {
                     break;
                 case 4:
                     bestRatedCheapestHotel();
+                    break;
+                case 5:
+                    LocalDate startDates = LocalDate.parse("2020-09-11", DateTimeFormatter.ISO_DATE);
+                    LocalDate endDates = LocalDate.parse("2020-09-12", DateTimeFormatter.ISO_DATE);
+
+                    bestRatedCheapestHotelRateCalculate(startDates,endDates,hotelList);
                     break;
             }
         } while (choice != 0);
