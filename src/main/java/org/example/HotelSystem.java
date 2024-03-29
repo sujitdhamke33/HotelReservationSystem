@@ -80,7 +80,7 @@ public class HotelSystem {
         int choice;
         do{
 
-            System.out.println(" 0 : exit , 1 : add Hotels , 2 : chepest Hotel");
+            System.out.println(" 0 : exit , 1 : add Hotels , 2 : chepest Hotel , 3 : cheapest Hotel for specific dates");
             choice = sc.nextInt();
             switch (choice){
                 case 0 :
@@ -91,6 +91,13 @@ public class HotelSystem {
                     break;
                 case 2 :
                     cheapestHotel();
+                    break;
+                case 3 :
+
+                    LocalDate startDate = LocalDate.parse("2020-09-11", DateTimeFormatter.ISO_DATE);
+                    LocalDate endDate = LocalDate.parse("2020-09-12", DateTimeFormatter.ISO_DATE);
+
+                    hotelRateCalculate(startDate, endDate, hotelList);
                     break;
             }
         }while (choice != 0);

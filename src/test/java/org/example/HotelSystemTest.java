@@ -11,8 +11,8 @@ class HotelSystemTest {
 
     @Test
     void rateCalculator(){
-        LocalDate startDate = LocalDate.of(2024, 3, 1);
-        LocalDate endDate = LocalDate.of(2024, 3, 5);
+        LocalDate startDate = LocalDate.of(2020, 9, 11);
+        LocalDate endDate = LocalDate.of(2020, 9, 12);
 
         List<Hotel> hotelList = new ArrayList<>();
         hotelList.add(new Hotel("Lakewood", 110, 90));
@@ -21,7 +21,7 @@ class HotelSystemTest {
 
         long result = HotelSystem.hotelRateCalculate(startDate,endDate,hotelList);
         System.out.println(result);
-        Assertions.assertEquals(510, result);
+        Assertions.assertEquals(200, result);
 
     }
 }
