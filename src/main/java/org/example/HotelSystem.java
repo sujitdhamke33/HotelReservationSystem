@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.Scanner;
 
 class Hotel {
-    private String name;private int weekdayRate,weekendRate;
-    public Hotel(String name, int weekdayRate, int weekendRate) {
+    private String name;private int weekdayRate,weekendRate,rating;
+    public Hotel(String name, int weekdayRate, int weekendRate ,int rating) {
         this.name = name;
         this.weekdayRate = weekdayRate;
         this.weekendRate = weekendRate;
+        this.rating = rating;
     }
     public int getRate(DayOfWeek dayOfWeek) {
         return (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) ? weekendRate : weekdayRate;
@@ -25,6 +26,7 @@ class Hotel {
                 "name='" + name + '\'' +
                 ", weekdayRate=" + weekdayRate +
                 ", weekendRate=" + weekendRate +
+                ", rating=" + rating +
                 '}';
     }
 }
@@ -33,9 +35,9 @@ public class HotelSystem {
     static List<Hotel> hotelList = new ArrayList<>();
     static Scanner sc = new Scanner(System.in);
     static void addHotel() {
-        hotelList.add(new Hotel("Lakewood", 110, 90));
-        hotelList.add(new Hotel("Bridgewood", 150, 50));
-        hotelList.add(new Hotel("Ridgewood", 220, 150));
+        hotelList.add(new Hotel("Lakewood", 110, 90,3));
+        hotelList.add(new Hotel("Bridgewood", 150, 50,4));
+        hotelList.add(new Hotel("Ridgewood", 220, 150,5));
         System.out.println(hotelList);
     }
 
