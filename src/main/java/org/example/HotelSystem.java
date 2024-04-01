@@ -155,41 +155,38 @@ public class HotelSystem {
        // return highestRating;
         return lowestPrice;
     }
+    public static void rewardCustomer(List<Hotel> hotelList) {
+        try (Scanner sc = new Scanner(System.in)) {
 
-    public static void rewardCustomer() {
-        LocalDate dateStart = null;
-        LocalDate dateEnd = null;
-        try {
+            String dateRegex = "\\d{4}-\\d{2}-\\d{2}";
+
             System.out.println("Enter the starting date in (yyyy-mm-dd): ");
             String startDate = sc.next();
-            dateStart = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
+            if (!startDate.matches(dateRegex)) {
+                throw new IllegalArgumentException("Error: Invalid date format");
+            }
+            LocalDate dateStart = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);// string ko object me
 
             System.out.println("Enter the ending date in (yyyy-mm-dd): ");
             String endDate = sc.next();
-            dateEnd = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
-        } catch (Exception e) {
-            System.out.println("Error: Invalid date format");
-            return;
-        }
-
-        Hotel bestRatedHotel = hotelList.get(0);
-        double lowestPrice = Double.MAX_VALUE;
-        long countDays = ChronoUnit.DAYS.between(dateStart, dateEnd);
-
-        for (int i = 0; i < hotelList.size(); i++) {
-            Hotel hotel = hotelList.get(i);
-            double totalRate = countDays * (hotel.getWeekdayReward() + hotel.getWeekendReward());
-
-            if (hotel.getRating() >= bestRatedHotel.getRating() || (hotel.getRating() == bestRatedHotel.getRating() && totalRate < lowestPrice)) {
-                bestRatedHotel = hotel;
-                lowestPrice = totalRate;
+            if (!endDate.matches(dateRegex)) {
+                throw new IllegalArgumentException("Error: Invalid date format");
             }
+            LocalDate dateEnd = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
+
+            long countDays = ChronoUnit.DAYS.between(dateStart, dateEnd);
+
+            Hotel bestRatedHotel = hotelList.stream()
+                    .min((hotel1, hotel2) -> {
+                        double totalRate1 = countDays * (hotel1.getWeekdayReward() + hotel1.getWeekendReward());
+                        double totalRate2 = countDays * (hotel2.getWeekdayReward() + hotel2.getWeekendReward());
+                        return Double.compare(totalRate1, totalRate2);
+                    })
+                    .orElseThrow(() -> new IllegalArgumentException("Error: No hotels found"));
+
+            System.out.println("Best rated hotel for the given date range for reward customers: " + bestRatedHotel.getName() + ", Rating: " + bestRatedHotel.getRating() + " and Total Rates: $" + (countDays * (bestRatedHotel.getWeekdayReward() + bestRatedHotel.getWeekendReward())));
         }
-
-        System.out.println("Best rated hotel for the given date range for reward customers: " + bestRatedHotel.getName() + ", Rating: " + bestRatedHotel.getRating() + " and Total Rates: $" + lowestPrice);
     }
-
-
     public static void main(String[] args) {
         HotelSystem hotelsystem = new HotelSystem();
         System.out.println("Welcome to my hotel system chain");
@@ -224,7 +221,7 @@ public class HotelSystem {
                     bestRatedCheapestHotelRateCalculate(startDates,endDates,hotelList);
                     break;
                 case 6:
-                    rewardCustomer();
+                    rewardCustomer(hotelList);
                     break;
             }
         } while (choice != 0);
