@@ -128,31 +128,41 @@ public class HotelSystem {
         bestRatedCheapestHotelRateCalculate(dateStart, dateEnd, hotelList);
     }
 
-    static long bestRatedCheapestHotelRateCalculate(LocalDate startDate, LocalDate endDate, List<Hotel> hotelList) {
-        Hotel bestRatedHotel = hotelList.get(0);
+    public static long bestRatedCheapestHotelRateCalculate(LocalDate startDate, LocalDate endDate, List<Hotel> hotelList) {
+        if (startDate == null || endDate == null || hotelList == null || hotelList.isEmpty()) {
+            throw new IllegalArgumentException("Invalid input");
+        }
+
+        LocalDate currentDate = startDate;
         long lowestPrice = Long.MAX_VALUE;
-        int highestRating = Integer.MIN_VALUE;
+        Hotel bestRatedHotel = null;
 
-        for (Hotel hotel : hotelList) {
-            long totalCost = 0;
-            LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            final LocalDate tempDate = currentDate;
+            Hotel cheapestHotel = hotelList.stream()
+                    .min((hotel1, hotel2) -> {
+                        double totalRate1 = tempDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) || tempDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)
+                                ? hotel1.getWeekendRate() : hotel1.getWeekdayRate();
+                        double totalRate2 = tempDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) || tempDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)
+                                ? hotel2.getWeekendRate() : hotel2.getWeekdayRate();
+                        return Double.compare(totalRate1, totalRate2);
+                    })
+                    .orElseThrow(() -> new IllegalArgumentException("Error: No hotels found"));
 
-            while (!currentDate.isAfter(endDate)) {
-                totalCost += hotel.getRate(currentDate.getDayOfWeek());
-                currentDate = currentDate.plusDays(1);
+            long totalCost = cheapestHotel.getRate(currentDate.getDayOfWeek());
+            if (totalCost < lowestPrice || (totalCost == lowestPrice && cheapestHotel.getRating() > bestRatedHotel.getRating())) {
+                lowestPrice = totalCost;
+                bestRatedHotel = cheapestHotel;
             }
 
-            if (totalCost <= lowestPrice) {
-                if (totalCost < lowestPrice || hotel.getRating() > highestRating) {
-                    lowestPrice = totalCost;
-                    bestRatedHotel = hotel;
-                    highestRating = hotel.getRating();
-                }
-            }
+            currentDate = currentDate.plusDays(1);
+        }
+
+        if (bestRatedHotel == null) {
+            throw new IllegalArgumentException("Error: No hotels found");
         }
 
         System.out.println("Best rated hotel for the given price range: " + bestRatedHotel.toString() + " and price is: " + lowestPrice);
-       // return highestRating;
         return lowestPrice;
     }
     public static void rewardCustomer(List<Hotel> hotelList) {
