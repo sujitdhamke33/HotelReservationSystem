@@ -199,6 +199,7 @@ public class HotelSystem {
     }
     public static void main(String[] args) {
         HotelSystem hotelsystem = new HotelSystem();
+        System.out.println("aujit");
         System.out.println("Welcome to my hotel system chain");
         int choice;
         do {
