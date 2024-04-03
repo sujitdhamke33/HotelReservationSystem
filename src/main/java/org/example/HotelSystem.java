@@ -28,9 +28,9 @@ public class HotelSystem {
         Hotel hotel1 = new Hotel("Lakewood",110);
         hotelList.add(hotel1);
         Hotel hotel2 = new Hotel("Bridgewood",160);
-        hotelList.add(hotel1);
+        hotelList.add(hotel2);
         Hotel hotel3 = new Hotel("Ridgewood",210);
-        hotelList.add(hotel1);
+        hotelList.add(hotel3);
 
         System.out.println("Hotelist are : " + hotelList);
     }
